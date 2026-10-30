@@ -1,0 +1,41 @@
+# C and C++ build artifacts
+*.a
+*.app
+*.d
+*.dll
+*.dwo
+*.dylib
+*.exe
+*.gch
+*.ilk
+*.la
+*.lai
+*.lib
+*.lo
+*.mod
+*.o
+*.obj
+*.out
+*.pch
+*.pdb
+*.slo
+*.smod
+*.so
+**/bin/
+
+# Generated protocol state and runtime output
+**/keys/
+**/tools/test.txt
+**/results/
+/experiment_records/
+/parameter_search/*.csv
+*.log
+*.pid
+
+# Python, editors, and operating-system files
+**/__pycache__/
+*.py[cod]
+.idea/
+.vscode/
+cmake-build-*/
+.DS_Store

@@ -1,0 +1,46 @@
+diff --git a/volePSI/RsCpsi.cpp b/volePSI/RsCpsi.cpp
+--- a/volePSI/RsCpsi.cpp
++++ b/volePSI/RsCpsi.cpp
+@@ -146,5 +146,11 @@ namespace volePSI
+     }
+-
+-    Proto RsCpsiReceiver::receive(span<block> X, Sharing& ret, Socket& chl)
++
++    void RsCpsiReceiver::setCuckooSeed(const block& seed)
++    {
++        mCuckooSeed = seed;
++        mHasCuckooSeed = true;
++    }
++
++    Proto RsCpsiReceiver::receive(span<block> X, Sharing& ret, Socket& chl)
+     {
+         auto cuckooSeed = block{};
+@@ -165,5 +171,11 @@ namespace volePSI
+         setTimePoint("RsCpsiReceiver::receive begin");
+-
+-        cuckooSeed = mPrng.get();
++
++        cuckooSeed = mPrng.get();
++        if (mHasCuckooSeed)
++        {
++            cuckooSeed = mCuckooSeed;
++            mHasCuckooSeed = false;
++        }
++
+         co_await (chl.send(std::move(cuckooSeed)));
+         cuckoo.init(mRecverSize, mSsp, 0, 3);
+diff --git a/volePSI/RsCpsi.h b/volePSI/RsCpsi.h
+--- a/volePSI/RsCpsi.h
++++ b/volePSI/RsCpsi.h
+@@ -113,4 +113,10 @@ namespace volePSI
+         // The output is written to s.
+         Proto receive(span<block> X, Sharing& s, Socket& chl);
+-
++
++        void setCuckooSeed(const block& seed);
++
++    private:
++        block mCuckooSeed{};
++        bool mHasCuckooSeed = false;
++
+     };
